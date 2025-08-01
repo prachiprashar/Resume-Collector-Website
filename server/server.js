@@ -156,6 +156,17 @@ app.use((err, req, res, next) => {
     next(err);
 });
 
+// server/server.js
+const cors = require('cors');
+
+// This allows requests from your local React app AND your future deployed frontend
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions)); // Use the options here
+
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
