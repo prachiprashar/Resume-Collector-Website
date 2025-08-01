@@ -1,0 +1,157 @@
+/* --- General Body & Font Styling --- */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f4f7f9;
+    color: #333;
+}
+
+/* --- Main App Container --- */
+.app-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Header --- */
+.app-header {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* --- Form Styling --- */
+.resume-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95em;
+    color: #555;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+/* --- Custom File Input --- */
+.file-input-label {
+    display: block;
+    background-color: #f8f9fa;
+    color: #4a90e2;
+    border: 1px dashed #dcdfe6;
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.file-input-label:hover {
+    background-color: #eef4fc;
+    border-color: #a0c3ed;
+}
+
+/* Hide the default file input */
+.form-group input[type="file"] {
+    display: none;
+}
+
+.file-name {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #333;
+    font-style: italic;
+}
+
+/* --- Error and Success Message Styling --- */
+.error-message {
+    color: #e74c3c;
+    font-size: 0.85em;
+    margin-top: 6px;
+}
+
+.submit-message {
+    text-align: center;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.submit-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.submit-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* --- Submit Button --- */
+.submit-btn {
+    padding: 14px 20px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 10px; /* Add some space above the button */
+}
+
+.submit-btn:hover {
+    background-color: #357abd;
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .app-container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .app-header {
+        font-size: 1.5em;
+    }
+}
