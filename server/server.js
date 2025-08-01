@@ -4,9 +4,18 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs'); // <-- 1. REQUIRE THE FILE SYSTEM MODULE
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+// --- Create uploads directory if it doesn't exist ---
+// This ensures Multer has a destination to save files on Render's server
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)){
+    fs.mkdirSync(uploadsDir); // <-- 2. CREATE THE DIRECTORY SYNCHRONOUSLY ON STARTUP
+}
+
 
 // --- Middleware Setup ---
 
@@ -16,12 +25,13 @@ const corsOptions = {
     optionsSuccessStatus: 200
 };
 
-// 2. Use CORS with your options. This is the ONLY place app.use(cors) should appear.
+// 2. Use CORS with your options.
 app.use(cors(corsOptions));
 
 // 3. Other middleware
 app.use(express.json());
-app.use('/uploads', express.static('uploads')); // Serve files from the 'uploads' directory
+// This line allows the server to serve the uploaded files so they can be accessed via a URL
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- Database Connection ---
 mongoose.connect(process.env.MONGODB_URI, {
@@ -36,7 +46,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 // --- Multer Configuration for File Uploads ---
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        cb(null, uploadsDir); // Use the absolute path
     },
     filename: function (req, file, cb) {
         cb(null, `${Date.now()}-${file.originalname}`);
@@ -102,7 +112,6 @@ const Resume = mongoose.model('Resume', resumeSchema);
 
 // --- API Endpoint for Form Submission ---
 app.post('/submit', (req, res, next) => {
-    // This wrapper ensures Multer errors are caught properly before hitting the main async block
     const uploadMiddleware = upload.single('resume');
     uploadMiddleware(req, res, function (err) {
         if (err instanceof multer.MulterError) {
@@ -111,10 +120,8 @@ app.post('/submit', (req, res, next) => {
             }
             return res.status(400).send(err.message);
         } else if (err) {
-            // This catches the custom fileFilter error (e.g., 'Invalid file type')
             return res.status(400).send(err.message);
         }
-        // If no error, proceed to the next middleware (the async route handler)
         next();
     });
 }, async (req, res) => {
@@ -130,14 +137,14 @@ app.post('/submit', (req, res, next) => {
             applicationType: req.body.applicationType,
             jobTitle: req.body.jobTitle,
             interestedAreas: req.body.interestedAreas,
-            resumePath: req.file.path
+            // We save the filename, not the full path, to build a public URL later
+            resumePath: req.file.filename
         });
 
         await newResume.save();
         res.status(201).send('Resume submitted successfully!');
 
     } catch (error) {
-        // Handle Mongoose validation errors
         if (error.name === 'ValidationError') {
             let errors = {};
             Object.keys(error.errors).forEach((key) => {
@@ -145,11 +152,9 @@ app.post('/submit', (req, res, next) => {
             });
             return res.status(400).json({ message: 'Validation failed', errors });
         }
-        // Handle duplicate email error
         if (error.code === 11000) {
             return res.status(400).json({ message: 'Email already exists.', errors: { email: 'This email has already been used.' } });
         }
-
         console.error('Error submitting resume:', error);
         res.status(500).send('An unexpected error occurred.');
     }
