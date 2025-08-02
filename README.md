@@ -122,4 +122,3 @@ To get a local copy up and running, follow these simple steps.
     The application will open automatically in your browser at `http://localhost:3000`.
 
 ---
--   **Debugging Production Database Connectivity:** I resolved a `500 Internal Server Error` by analyzing server logs, which pointed to a `MongooseServerSelectionError`. This taught me the critical importance of whitelisting server IP addresses in **MongoDB Atlas** by setting Network Access to "Allow Access From Anywhere" (`0.0.0.0/0`).
