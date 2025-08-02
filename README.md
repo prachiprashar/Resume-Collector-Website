@@ -26,6 +26,41 @@ A full-stack web application built with the MERN stack (MongoDB, Express, React,
 
 ---
 
+## 📂 Viewing Submissions and File Storage
+
+This application stores submission data in two locations: the text data is stored in MongoDB, while the uploaded file is stored on the server's local disk.
+
+### 1. Form Data & Resume Path (MongoDB Atlas)
+
+All text-based data (name, email, etc.) and the *filename* of the resume are stored as a document in your MongoDB Atlas collection.
+
+**To view the data:**
+1.  Log in to your **MongoDB Atlas** account.
+2.  Navigate to your cluster and click the **"Browse Collections"** button.
+3.  Select the `resumeCollector` database and then the **`resumes`** collection.
+4.  You will see all the submissions as JSON documents.
+
+### 2. The Resume File (Render Server)
+
+The actual resume file (PDF/DOC/DOCX) is saved to the `uploads` folder on the Render server's disk. You can access it directly via its URL.
+
+**To view a specific resume:**
+1.  Find the `resumePath` value from the document in MongoDB (e.g., `1754054166077-Giri Resume.pdf`).
+2.  Construct the URL by combining your backend URL, the `/uploads` path, and the filename:
+    -   **Formula:** `[Backend URL] + /uploads/ + [resumePath]`
+    -   **Example:** `https://resume-collector-website.onrender.com/uploads/1754054166077-Giri Resume.pdf`
+3.  Paste this URL into your browser to view or download the file.
+
+### ⚠️ Important Note on File Persistence
+
+> **CRITICAL TO UNDERSTAND:** The file storage on Render's free tier is **ephemeral**, meaning the server's local disk is temporary.
+>
+> **All uploaded resume files WILL BE DELETED** whenever the server restarts or redeploys (which happens automatically on code changes or periodically due to inactivity).
+>
+> The solution implemented in this project is a proof-of-concept. For a production-ready application, files must be stored on a dedicated cloud storage service like **AWS S3** or **Cloudinary**.
+
+---
+
 ## 🛠️ Technology Stack & Architecture
 
 This project follows a standard decoupled MERN stack architecture, deployed as two distinct microservices.
@@ -87,3 +122,4 @@ To get a local copy up and running, follow these simple steps.
     The application will open automatically in your browser at `http://localhost:3000`.
 
 ---
+-   **Debugging Production Database Connectivity:** I resolved a `500 Internal Server Error` by analyzing server logs, which pointed to a `MongooseServerSelectionError`. This taught me the critical importance of whitelisting server IP addresses in **MongoDB Atlas** by setting Network Access to "Allow Access From Anywhere" (`0.0.0.0/0`).
