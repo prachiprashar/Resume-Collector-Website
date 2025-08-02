@@ -87,17 +87,3 @@ To get a local copy up and running, follow these simple steps.
     The application will open automatically in your browser at `http://localhost:3000`.
 
 ---
-
-## 💡 Challenges & Learnings
-
-Building and deploying this project provided several valuable real-world learning experiences:
-
--   **Deploying a Monorepo to Different Services:** I learned how to deploy a single repository containing separate `client` and `server` applications. This involved mastering the **"Root Directory"** setting on both **Vercel** and **Render** to ensure each platform built the correct part of the project.
-
--   **Fixing Nested Git Repositories:** I troubleshooted an issue where the `client` directory was not visible on GitHub or Vercel. I learned that `create-react-app` creates its own Git repository, and I resolved this by removing the nested `.git` folder and correctly re-committing the files, converting the submodule to a regular directory.
-
--   **Solving Production CORS Issues:** I debugged and resolved **Cross-Origin Resource Sharing (CORS)** errors by correctly configuring the Express server to only accept requests from the deployed frontend URL, using environment variables to manage the allowed origin securely.
-
--   **Handling Ephemeral Filesystems:** I diagnosed and fixed an `ENOENT: no such file or directory` error on Render. This taught me about its **ephemeral filesystem** and led me to implement a solution that programmatically creates the `uploads` directory on server startup.
-
--   **Debugging Production Database Connectivity:** I resolved a `500 Internal Server Error` by analyzing server logs, which pointed to a `MongooseServerSelectionError`. This taught me the critical importance of whitelisting server IP addresses in **MongoDB Atlas** by setting Network Access to "Allow Access From Anywhere" (`0.0.0.0/0`).
