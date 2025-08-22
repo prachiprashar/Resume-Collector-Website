@@ -1,61 +1,76 @@
-# Patient Information Form 🚀
+# MERN Stack - Resume Collector 🚀
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Now-2ea44f?style=for-the-badge&logo=github)](https://prachi-prashar.github.io/patient-information-form/)[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)[![Vite](https://img.shields.io/badge/Vite-Fast-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)[![Ant Design](https://img.shields.io/badge/Ant_Design-UI-1677FF?style=for-the-badge&logo=ant-design)](https://ant.design/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Now-2ea44f?style=for-the-badge&logo=vercel)](https://resume-collector-website.vercel.app)[![API Status](https://img.shields.io/badge/API-Live_on_Render-4D88FF?style=for-the-badge&logo=render)](https://resume-collector-website.onrender.com)[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)[![Node.js](https://img.shields.io/badge/Node.js-20-43853d?style=for-the-badge&logo=node.js)](https://nodejs.org/)
 
-A modern, responsive, and user-friendly web application for collecting patient information. Built with a fast Vite + React frontend and the professional Ant Design component library, this project demonstrates a clean, single-page application architecture focused on excellent user experience and robust form handling.
+A full-stack web application built with the MERN stack (MongoDB, Express, React, Node.js) that provides a clean, user-friendly interface for collecting user resumes. The application features robust validation on both the client and server, secure file handling, and a decoupled architecture deployed on modern cloud platforms.
 
 ---
 
 ## 🎬 Live Demo
 
-**Check out the live application hosted on GitHub Pages:**
+**Check out the live application hosted on Vercel:**
 
-### 👉 [https://prachi-prashar.github.io/patient-information-form/](https://prachi-prashar.github.io/patient-information-form/)
+### 👉 [https://resume-collector-website.vercel.app](https://resume-collector-website.vercel.app)
+
+*(Note: The backend is hosted on Render's free tier, so it may take a moment to "wake up" and process the first submission.)*
 
 ---
 
 ## ✨ Key Features
 
--   **Automatic BMI Calculation:** The Body Mass Index (BMI) is calculated and displayed in real-time as the user enters their height and weight, providing instant feedback.
--   **Rich UI Components:** Leverages the powerful Ant Design library for high-quality inputs, date pickers, and select dropdowns, ensuring a professional and accessible interface.
--   **Comprehensive Form Validation:** Implements client-side validation to guide users, ensuring all required fields are filled correctly before submission.
--   **Fully Responsive Design:** The layout is built to be mobile-first, providing a seamless user experience on any device, from desktops to smartphones.
--   **Clear Submission Feedback:** After a successful submission, the form is replaced with a success message, confirming that the data has been processed and allowing the user to submit another entry.
+-   **Seamless Resume Submission:** A modern, single-page application for users to enter their details and upload a resume with ease.
+-   **Dual-Layer Validation:** Implements immediate **client-side** validation for a great UX and robust **server-side** validation using Mongoose for data integrity.
+-   **Secure File Uploads:** Uses **Multer** to handle `multipart/form-data`, enforcing strict rules on file types (PDF, DOC, DOCX) and size limits.
+-   **Decoupled MERN Architecture:** The **React** frontend and **Node.js/Express** backend operate as two separate applications, communicating via a REST API.
+-   **Cloud-Native Deployment:** Fully deployed on industry-standard platforms (**Vercel** & **Render**) and connected to a **MongoDB Atlas** cloud database.
 
 ---
 
-## 📂 Data Handling & Submission
+## 📂 Viewing Submissions and File Storage
 
-This project is a **frontend-only application** designed to demonstrate UI/UX and client-side logic.
+This application stores submission data in two locations: the text data is stored in MongoDB, while the uploaded file is stored on the server's local disk.
 
-### 1. How Data is Handled
+### 1. Form Data & Resume Path (MongoDB Atlas)
 
-Upon clicking the "Submit" button, the application performs the following actions:
-1.  Validates all form fields to ensure the data is complete and correct.
-2.  Collects all the data into a single JavaScript object.
-3.  **Logs this object to the browser's developer console.**
+All text-based data (name, email, etc.) and the *filename* of the resume are stored as a document in your MongoDB Atlas collection.
 
-### 2. Viewing the Output
+**To view the data:**
+1.  Log in to your **MongoDB Atlas** account.
+2.  Navigate to your cluster and click the **"Browse Collections"** button.
+3.  Select the `resumeCollector` database and then the **`resumes`** collection.
+4.  You will see all the submissions as JSON documents.
 
-To see the captured data:
-1.  Open the live demo link.
-2.  Open your browser's Developer Tools (usually by pressing `F12` or `Ctrl+Shift+I`).
-3.  Click on the **"Console"** tab.
-4.  Fill out the form and click "Submit".
-5.  The complete form data object will appear in the console.
+### 2. The Resume File (Render Server)
 
-> **Note on Production Use:** This console-logging approach is for demonstration purposes only. A production-ready application would send this data via a secure API request to a backend server, which would then store it in a database.
+The actual resume file (PDF/DOC/DOCX) is saved to the `uploads` folder on the Render server's disk. You can access it directly via its URL.
+
+**To view a specific resume:**
+1.  Find the `resumePath` value from the document in MongoDB (e.g., `1754054166077-Giri Resume.pdf`).
+2.  Construct the URL by combining your backend URL, the `/uploads` path, and the filename:
+    -   **Formula:** `[Backend URL] + /uploads/ + [resumePath]`
+    -   **Example:** `https://resume-collector-website.onrender.com/uploads/1754054166077-Giri Resume.pdf`
+3.  Paste this URL into your browser to view or download the file.
+
+### ⚠️ Important Note on File Persistence
+
+> **CRITICAL TO UNDERSTAND:** The file storage on Render's free tier is **ephemeral**, meaning the server's local disk is temporary.
+>
+> **All uploaded resume files WILL BE DELETED** whenever the server restarts or redeploys (which happens automatically on code changes or periodically due to inactivity).
+>
+> The solution implemented in this project is a proof-of-concept. For a production-ready application, files must be stored on a dedicated cloud storage service like **AWS S3** or **Cloudinary**.
 
 ---
 
 ## 🛠️ Technology Stack & Architecture
 
-This project is a client-side application built with a modern frontend toolchain.
+This project follows a standard decoupled MERN stack architecture, deployed as two distinct microservices.
 
--   **Frontend:** Built with **React** for creating a dynamic, component-based user interface.
--   **Build Tool:** **Vite** is used for its blazing-fast development server and optimized production builds.
--   **UI Framework:** **Ant Design** provides a comprehensive library of enterprise-class UI components that ensures a polished and consistent look and feel.
--   **Deployment:** The application is deployed as a static site on **GitHub Pages**, with an automated deployment process managed by the `gh-pages` package.
+-   **Frontend (Client):** Built with **React** and **Axios** for creating a dynamic user interface and making asynchronous API calls to the backend. Styled with pure **CSS**.
+-   **Backend (Server):** An **Express.js** server running on **Node.js** that exposes a REST API endpoint for form submissions and file handling.
+-   **Database:** **MongoDB Atlas** (a fully-managed cloud database) stores all user data. **Mongoose** is used as the Object Data Modeling (ODM) library to define schemas and interact with the database.
+-   **Deployment:**
+    -   The **frontend** is deployed on **Vercel** for optimal performance and fast global delivery.
+    -   The **backend** is deployed as a web service on **Render**.
 
 ---
 
@@ -65,26 +80,45 @@ To get a local copy up and running, follow these simple steps.
 
 ### Prerequisites
 
--   Node.js (v16 or later) & npm
+-   Node.js (v18 or later) & npm
 -   Git
+-   A MongoDB Atlas account and your [connection string](https://www.mongodb.com/docs/atlas/getting-started/).
 
 ### Installation
 
 1.  **Clone the repository:**
     ```sh
-    git clone https://github.com/prachi-prashar/patient-information-form.git
-    cd patient-information-form
+    git clone https://github.com/prachiprashar/Resume-Collector-Website.git
+    cd Resume-Collector-Website
     ```
 
-2.  **Install project dependencies:**
+2.  **Set up and run the Backend (Server):**
     ```sh
+    # Navigate to the server directory
+    cd server
+    
+    # Install server dependencies
     npm install
+    
+    # Create a .env file and add your database connection string
+    MONGODB_URI="mongodb+srv://YourUser:YourPassword@cluster..."
+    
+    # Start the server (in its own terminal)
+    npm start
     ```
+    The backend will now be running on `http://localhost:5000`.
 
-3.  **Start the development server:**
+3.  **Set up and run the Frontend (Client):**
     ```sh
-    npm run dev
+    # Open a NEW terminal and navigate to the client directory from the root
+    cd ../client 
+    
+    # Install client dependencies
+    npm install
+    
+    # Start the React development server
+    npm start
     ```
-    The application will open automatically in your browser at `http://localhost:5173`.
+    The application will open automatically in your browser at `http://localhost:3000`.
 
 ---
